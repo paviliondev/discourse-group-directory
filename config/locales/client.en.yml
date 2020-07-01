@@ -1,0 +1,13 @@
+en:
+  js:
+    rstudio_company: "Company"
+    rstudio_language: "Language"
+    rstudio_filter: "username, company, or language"
+    rstudio_expand: "Expand Profile"
+    rstudio_collapse: "Collapse Profile"
+
+    user:
+      custom_preferences:
+        company: "Company"
+        consult_language: "Consult Language"
+        consultant_var_01: "Consultant Var 1"

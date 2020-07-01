@@ -1,0 +1,101 @@
+.container.consultants .user-content-wrapper {
+    display: block;
+}
+
+table.r-consultants {
+    tr {
+        td {
+            color: $primary !important;
+        }
+        td:first-child {
+            vertical-align: top;
+            width: 20%;
+            padding-left: 1%;
+            // .avatar {
+            //     width: 150px;
+            //     height: 150px;
+            // }
+        }
+        td:nth-child(2) {
+            width: 70%;
+            text-align: left;
+            .user-bio-wrapper {
+                padding-left: 3%;
+            }
+        }
+        td:nth-child(3) {
+            padding-right: 1%;
+            .group-member-dropdown {
+                float: right;
+            }
+        }
+        td.user-bio {
+            vertical-align: top;
+        }
+    }
+    .user-info .user-detail {
+        margin-top: 6%;
+        padding-left: 0%;
+        .username a {
+            color: $primary !important;
+            font-size: 1.3em;
+        }
+        .name {
+            color: $primary !important;
+            font-size: 1.6em;
+            display: block;
+            margin-left: 0%;
+        }
+    }
+    .user-private-message {
+        margin-top: 10px;
+        display: block;
+    }
+    .user-badge {
+        border: 0px;
+        padding: 3px 1px;
+        font-size: 18px;
+        background-color: inherit;
+        span {
+            display: none;
+        }
+    }
+    .user-badge img, #user-card .more-user-badges img, #group-card .more-user-badges img {
+        height: 28px;
+        width: 28px;
+    }
+    .user-bio-wrapper {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .bio-collapse {
+        display: none;
+        width: 100%;
+    }
+    .bio-expand {
+        width: 100%;
+        display: none;
+    }
+    .user-loc {
+        padding-top: 8px;
+        .fa {
+            padding-right: 5px;
+        }
+    }
+    .user-meta-wrapper {
+        display: inline-block;
+    }
+}
+
+.non-admin {
+  table.r-consultants {
+      tr {
+          td:nth-child(2) {
+              width: 80%!important;
+          }
+          td:nth-child(3) {
+              padding-right: 0%!important;
+          }
+      }
+    }
+}

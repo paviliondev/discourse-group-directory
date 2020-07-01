@@ -1,0 +1,8 @@
+en:
+  site_settings: 
+    group_directory_enabled: "Enable group directory"
+    rstudio_company_field: "Please enter the name of the custom user field created for the company."
+    rstudio_language_field: "Please enter the name of the custom user field created for the consulting languages."
+    rstudio_consultant_var_01_field: "Please enter the name of the custom user field created for sorting consultants."
+    rstudio_highlight_badge: "Please enter the badge used to highlight users."
+    rstudio_highlight_color: "Please enter the color to highlight users based on badge."

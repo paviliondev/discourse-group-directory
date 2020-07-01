@@ -1,0 +1,92 @@
+<div class="group-members-actions">
+   {{text-field
+     value=filterInput
+     placeholderKey="rstudio_filter"
+     class="group-username-filter no-blur"}}
+
+  <div class="group-members-manage">
+    {{#if canManageGroup}}
+      {{d-button
+        icon="plus"
+        action=(route-action "showAddMembersModal")
+        label="groups.add_members.title"
+        class="group-members-add"}}
+       
+       {{#if currentUser.admin}}
+         {{d-button
+           icon="plus"
+           action=(route-action "showBulkAddModal")
+           label="admin.groups.bulk_add.title"
+           class="group-bulk-add"}}
+       {{/if}}
+    {{/if}}
+  </div>
+</div>
+
+{{#if hasMembers}}
+  <table class='group-members r-consultants'>
+    <tbody>
+      {{#each sortedMembers as |m|}}
+        {{#unless m.owner}}
+          <tr class='consultant-{{m.username}}-row' {{action (action "consultantClick" m)}}>
+            <td class='avatar'>
+              {{consultant-info user=m}}
+
+              <div class="user-meta-wrapper">
+                {{#if m.company}}
+                  <strong>Company: </strong><span class="text">{{m.company}}</span>
+                {{/if}}
+                {{#if m.location}}
+                  <div class="user-loc">
+                    {{d-icon "map-marker-alt"}}{{m.location}}
+                  </div>
+                {{/if}}
+              </div>
+
+              {{d-button
+                class="btn-default user-private-message"
+                action=(action "sendMessage" m)
+                icon="envelope"
+                label="user.private_message"}}
+            </td>
+            
+            <td class="user-bio">
+              <div class='user-bio-wrapper {{m.username}}-bio'>
+                {{#if m.badges}}
+                  <strong>Services: </strong>
+                  {{#each m.badges as |badge|}}
+                    {{user-badge badge=badge.badge user=m}}
+                  {{/each}}
+                  <br>
+                {{/if}}
+                {{#if m.consult_language}}
+                  <strong>Language(s): </strong><span class="text">{{m.consult_language}}</span>
+                {{/if}}
+                <span class="text">{{{m.bio_cooked}}}</span>
+              </div>
+              <div class="{{m.username}}-bio-buttons">
+                {{d-button class="btn-default bio-expand" action=(action "expandBio" m) icon="plus" label="rstudio_expand"}}
+                {{d-button class="btn-default bio-collapse" action=(action "collapseBio" m) icon="minus" label="rstudio_collapse"}}
+              </div>
+            </td>
+            
+            <td>
+              {{#if canManageGroup}}
+                {{group-member-dropdown
+                  removeMember=(action "removeMember")
+                  makeOwner=(action "makeOwner")
+                  removeOwner=(action "removeOwner")
+                  member=m}}
+              {{/if}}
+            </td>
+          </tr>
+        {{/unless}}
+      {{/each}}
+     </tbody>
+  </table>
+
+  {{conditional-loading-spinner condition=loading}}
+{{else}}
+  <br>
+  <div>{{i18n "groups.empty.members"}}</div>
+{{/if}}

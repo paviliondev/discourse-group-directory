@@ -1,0 +1,23 @@
+plugins:
+  group_directory_enabled:
+    default: true
+    client: true
+  rstudio_company_field:
+    type: string
+    default: "Company"
+  rstudio_language_field:
+    type: string
+    default: "Language(s)"
+    client: true
+  rstudio_consultant_var_01_field:
+    type: string
+    default: "consultant_var_01"
+    client: true
+  rstudio_highlight_badge:
+    type: string
+    default: ""
+    client: true
+  rstudio_highlight_color:
+    type: string
+    default: "#0f82af"
+    client: true
