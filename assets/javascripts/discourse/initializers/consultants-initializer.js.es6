@@ -1,7 +1,20 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import UserBadge from 'discourse/models/user-badge';
+import BadgeGrouping from 'discourse/models/badge-grouping';
+import Badge from 'discourse/models/badge';
 
 function initializeConsultants(api) {
-  api.modifyClass('route:group-index', {      
+  api.modifyClass('route:group-index', {
+    afterModel(model) {
+      if (model && model.name == 'consultants') {
+        return Badge.findAll().then(function(result) {
+          model.set('consultantBadges', result.filter(b => b.badge_grouping.name == "Consultants"));
+        })
+      } else {
+        return this._super(model);
+      }
+    },
+        
     setupController(controller, model) {
       if (model.name == 'consultants') {
         this.controllerFor("group").set("showing", "members");

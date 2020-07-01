@@ -1,0 +1,53 @@
+<td class='avatar'>
+  {{consultant-info user=user}}
+
+  <div class="user-meta-wrapper">
+    {{#if user.company}}
+      <strong>Company: </strong><span class="text">{{user.company}}</span>
+    {{/if}}
+    {{#if user.location}}
+      <div class="user-loc">
+        {{d-icon "map-marker-alt"}}{{user.location}}
+      </div>
+    {{/if}}
+  </div>
+
+  {{d-button
+    class="btn-default user-private-message"
+    action=(action "sendMessage")
+    icon="envelope"
+    label="user.private_message"}}
+</td>
+
+<td class="user-bio">
+  <div class='user-bio-wrapper'>
+    {{#if displayBadges}}
+      <strong>Services: </strong>
+      {{#each displayBadges as |badge|}}
+        {{user-badge badge=badge user=user}}
+      {{/each}}
+      <br>
+    {{/if}}
+    {{#if user.consult_language}}
+      <strong>Language(s): </strong><span class="text">{{user.consult_language}}</span>
+    {{/if}}
+    <span class="text">{{{user.bio_cooked}}}</span>
+  </div>
+  <div class="bio-buttons">
+    {{#if minimized}}
+      {{d-button class="btn-default bio-expand" action=(action "expandBio") icon="plus" label="rstudio_expand"}}
+    {{else}}
+      {{d-button class="btn-default bio-collapse" action=(action "collapseBio") icon="minus" label="rstudio_collapse"}}
+    {{/if}}
+  </div>
+</td>
+
+<td>
+  {{#if canManageGroup}}
+    {{group-member-dropdown
+      removeMember=(action "removeMember")
+      makeOwner=(action "makeOwner")
+      removeOwner=(action "removeOwner")
+      member=m}}
+  {{/if}}
+</td>
