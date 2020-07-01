@@ -3,6 +3,7 @@ import Composer from 'discourse/models/composer';
 import { default as DiscourseURL, userPath } from "discourse/lib/url";
 import Component from "@ember/component";
 import { getOwner } from 'discourse-common/lib/get-owner';
+import { equal } from "@ember/object/computed";
 
 const minimizedMap = [210,229,256,287];
 
@@ -17,9 +18,11 @@ const bioLength = function(user) {
 export default Component.extend({
   tagName: 'tr',
   attributeBindings: ['style'],
+  bioExpanded: equal('bioHeight', '100%'),
+  collapsedBioHeight: null,
   
-  @discourseComputed('hasHighlightBadge', 'minimized', 'minimizedHeight')
-  style(hasHighlightBadge, minimized, minimizedHeight) {
+  @discourseComputed('hasHighlightBadge')
+  style(hasHighlightBadge) {
     let style = '';
         
     if (hasHighlightBadge) {
@@ -27,39 +30,40 @@ export default Component.extend({
       style += `background-color: ${color};`.htmlSafe();
     }
     
-    if (minimized && minimizedHeight) {
-      style += `height: ${minimizedHeight}`;
-    } else {
-      style += `height: 100%`;
-    }
-    
     return style;
   },
   
   didInsertElement() {
-    this.handleShorten();
+    this.setCollapsedBioHeight();
   },
   
   click(args) {
     DiscourseURL.routeTo(userPath(this.user));
   },
-  
-  handleShorten() {
+
+  setCollapsedBioHeight() {
     const user = this.user;
-    
-    if (user.bio_cooked) {
-      if (bioLength(user) > 538) {
-        let fields = 0;
+    let collapsedBioHeight;
         
-        ['name', 'company', 'location'].forEach(attr => {
-          if (user[attr]) {
-            fields += 1;
-          }
-        });
-        
-        this.set('minimizedHeight', minimizedMap[fields])
-      }
+    if (user.bio_cooked && bioLength(user) > 538) {
+      let fields = 0;
+      
+      ['name', 'company', 'location'].forEach(attr => {
+        if (user[attr]) {
+          fields += 1;
+        }
+      });
+      
+      collapsedBioHeight = minimizedMap[fields];
+      this.set('collapsedBioHeight', collapsedBioHeight);
     }
+    
+    this.set('bioHeight', `${collapsedBioHeight}px` || '100%');
+  },
+  
+  @discourseComputed('bioHeight')
+  bioHeightStyle(bioHeight) {
+    return bioHeight || '100%';
   },
   
   @discourseComputed('consultantBadges')
@@ -81,11 +85,13 @@ export default Component.extend({
   
   actions: {
     expandBio() {
-      this.set('minimized', false);
+      this.set('bioHeight', '100%');
     },
     
     collapseBio() {
-      this.set('minimized', true);
+      if (this.collapsedBioHeight) {
+        this.set('bioHeight', `${this.collapsedBioHeight}px`);
+      }
     },
     
     sendMessage() {

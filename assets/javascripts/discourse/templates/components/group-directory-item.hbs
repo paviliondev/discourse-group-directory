@@ -20,7 +20,7 @@
 </td>
 
 <td class="user-bio">
-  <div class='user-bio-wrapper'>
+  <div class='user-bio-wrapper' style="height: {{bioHeight}}">
     {{#if displayBadges}}
       <strong>Services: </strong>
       {{#each displayBadges as |badge|}}
@@ -33,13 +33,15 @@
     {{/if}}
     <span class="text">{{{user.bio_cooked}}}</span>
   </div>
-  <div class="bio-buttons">
-    {{#if minimized}}
-      {{d-button class="btn-default bio-expand" action=(action "expandBio") icon="plus" label="rstudio_expand"}}
-    {{else}}
-      {{d-button class="btn-default bio-collapse" action=(action "collapseBio") icon="minus" label="rstudio_collapse"}}
-    {{/if}}
-  </div>
+  {{#if collapsedBioHeight}}
+    <div class="bio-buttons">
+      {{#if bioExpanded}}
+        {{d-button class="btn-default bio-collapse" action=(action "collapseBio") icon="minus" label="rstudio_collapse"}}
+      {{else}}
+        {{d-button class="btn-default bio-expand" action=(action "expandBio") icon="plus" label="rstudio_expand"}}
+      {{/if}}
+    </div>
+  {{/if}}
 </td>
 
 <td>
