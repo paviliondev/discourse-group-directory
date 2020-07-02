@@ -37,8 +37,8 @@ export default Component.extend({
     this.setCollapsedBioHeight();
   },
   
-  click(args) {
-    DiscourseURL.routeTo(userPath(this.user));
+  click() {
+    DiscourseURL.routeTo(userPath(this.user.username_lower));
   },
 
   setCollapsedBioHeight() {

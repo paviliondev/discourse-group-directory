@@ -4,6 +4,10 @@ import User from 'discourse/models/user';
 import { scheduleOnce } from "@ember/runloop";
 import { sort, equal } from "@ember/object/computed";
 import EmberObject from "@ember/object";
+import discourseDebounce from "discourse/lib/debounce";
+import { INPUT_DELAY } from "discourse-common/config/environment";
+
+const filterableFields = ['name', 'username', 'company', 'consult_language', 'bio_cooked', 'location'];
 
 export default GroupIndexController.extend({
   sortProperties: [Discourse.SiteSettings.rstudio_consultant_var_01_field + ':desc'],
@@ -15,15 +19,16 @@ export default GroupIndexController.extend({
     return { order, desc, filter };
   },
   
-  searchMembers(isFirst) {
+  @observes('filter')
+  filterMembers: discourseDebounce(function() {
     this.set("loading", true);
     const memberCache = this.get("memberCache");
     const filter = this.get("filter");
-    
+
     if (memberCache) {
       let users = memberCache.filter((user) => {
-        return !filter || ['username', 'company', 'consult_language', 'bio_cooked', 'location'].any(attr => {
-          return item[attr] && item[attr].toLowerCase().includes(filter.toLowerCase());
+        return !filter || filterableFields.any(attr => {
+          return user[attr] && user[attr].toLowerCase().includes(filter.toLowerCase());
         })
       });
       
@@ -31,7 +36,7 @@ export default GroupIndexController.extend({
     }
     
     this.set("loading", false);
-  },
+  }, INPUT_DELAY),
   
   findConsultants() {
     if (!this.currentUser || (this.currentUser && !this.currentUser.admin)) {
@@ -53,10 +58,5 @@ export default GroupIndexController.extend({
       this.set("loading", false);
       this.set("memberCache", model.members);
     });
-  },
-  
-  @observes("order", "asc", "filter")
-  _filtersChanged() {
-    this.findConsultants();
   }
 });
