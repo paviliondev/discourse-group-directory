@@ -10,7 +10,7 @@ import { INPUT_DELAY } from "discourse-common/config/environment";
 const filterableFields = ['name', 'username', 'company', 'consult_language', 'bio_cooked', 'location'];
 
 export default GroupIndexController.extend({
-  sortProperties: [Discourse.SiteSettings.rstudio_consultant_var_01_field + ':desc'],
+  sortProperties: [this.siteSettings.rstudio_consultant_var_01_field + ':desc'],
   sortedMembers: sort('model.members', 'sortProperties'),
   isConsultantsPage: equal('model.name', 'consultants'),
   
