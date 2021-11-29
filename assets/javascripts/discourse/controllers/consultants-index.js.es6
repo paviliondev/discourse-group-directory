@@ -10,10 +10,14 @@ import { INPUT_DELAY } from "discourse-common/config/environment";
 const filterableFields = ['name', 'username', 'company', 'consult_language', 'bio_cooked', 'location'];
 
 export default GroupIndexController.extend({
-  sortProperties: [this.siteSettings.rstudio_consultant_var_01_field + ':desc'],
   sortedMembers: sort('model.members', 'sortProperties'),
   isConsultantsPage: equal('model.name', 'consultants'),
   
+  @computed
+  sortProperties() {
+    return [this.siteSettings.rstudio_consultant_var_01_field + ':desc']
+  },
+
   @computed("order", "desc", "filter")
   memberParams(order, desc, filter) {
     return { order, desc, filter };
@@ -47,8 +51,8 @@ export default GroupIndexController.extend({
     
     this.set("loading", true);
     const model = this.get("model");                
-        
-    model.findMembers(this.get("memberParams")).then(() => {
+
+    this.model.reloadMembers(this.memberParams, true).then(() => {
       ['members', 'owners'].forEach(k => {
         if (model[k] === null || model[k] === undefined) {
           model.set(k, 0);
